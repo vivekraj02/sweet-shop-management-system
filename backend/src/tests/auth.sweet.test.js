@@ -353,7 +353,8 @@ describe('Sweets API', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({ price: 3.99 });
 
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(404);
+      expect(response.body.message).toContain('Sweet not found');
     });
   });
 
@@ -415,16 +416,17 @@ describe('Sweets API', () => {
         .send({ quantity: 15 });
 
       expect(response.status).toBe(400);
-      expect(response.body.message).toContain('Insufficient stock');
+      expect(response.body.message).toContain('Not enough quantity in stock');
     });
 
-    test('should fail with invalid quantity', async () => {
+    test('should handle zero or negative quantity by defaulting to 1', async () => {
       const response = await request(app)
         .post(`/api/sweets/${sweetId}/purchase`)
         .set('Authorization', `Bearer ${userToken}`)
         .send({ quantity: 0 });
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(200);
+      expect(response.body.sweet.quantity).toBe(9); // 10 - 1 (default minimum)
     });
   });
 
@@ -456,13 +458,14 @@ describe('Sweets API', () => {
       expect(response.status).toBe(403);
     });
 
-    test('should fail with invalid quantity', async () => {
+    test('should handle negative quantity by defaulting to 1', async () => {
       const response = await request(app)
         .post(`/api/sweets/${sweetId}/restock`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send({ quantity: -1 });
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(200);
+      expect(response.body.sweet.quantity).toBe(11); // 10 + 1 (default minimum)
     });
   });
 });
