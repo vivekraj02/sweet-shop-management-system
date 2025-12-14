@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Search, ShoppingCart, Plus, Minus, Sparkles, Crown, LogIn, UserPlus, Menu, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import api from '../api'
 import { useAuth } from '../authContext.jsx'
 import { useCart } from '../contexts/CartContext'
 import { useWishlist } from '../contexts/WishlistContext'
+import { getSweetImage } from '../utils/sweetImages'
 
 export default function IndianSweetShop() {
+  const navigate = useNavigate()
   const [sweets, setSweets] = useState([])
   const [selectedSweet, setSelectedSweet] = useState(null)
   const [showCart, setShowCart] = useState(false)
@@ -18,6 +21,8 @@ export default function IndianSweetShop() {
   const [authError, setAuthError] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [animateItems, setAnimateItems] = useState(false)
+  const [quantities, setQuantities] = useState({})
+  const [loading, setLoading] = useState(false)
 
   const { user, login } = useAuth()
   const { items: cartItems, addToCart, clearCart } = useCart()
@@ -101,7 +106,7 @@ export default function IndianSweetShop() {
             <div className="col-12 col-sm-6 col-lg-3" key={s._id}>
               <div className={`card shadow-sm h-100`} style={{ borderRadius: 20 }}>
                 <div className="p-4" style={{ background: 'linear-gradient(90deg,#ffedd5,#fbcfe8)', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
-                  <div className="text-center fs-1">{s.image && String(s.image).startsWith('http') ? <img src={s.image} alt={s.name} style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: 12 }} /> : (s.image || '🍬')}</div>
+                  <div className="text-center fs-1">{s.image && String(s.image).startsWith('http') ? <img src={s.image} alt={s.name} style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: 12 }} /> : getSweetImage(s.name)}</div>
                 </div>
                 <div className="card-body">
                   <h5 className="card-title">{s.name}</h5>
@@ -110,8 +115,41 @@ export default function IndianSweetShop() {
                     <div className="fw-bold text-success">₹{s.price}</div>
                     <div className="badge bg-warning text-dark">Stock: {s.quantity}</div>
                   </div>
+                  {s.quantity > 0 && (
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem', display: 'block' }}>Quantity</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        min={1}
+                        max={s.quantity}
+                        value={quantities[s._id] || 1}
+                        onChange={(e) => setQuantities({ ...quantities, [s._id]: Math.min(s.quantity, Math.max(1, parseInt(e.target.value) || 1)) })}
+                        style={{ marginBottom: '0.5rem' }}
+                      />
+                    </div>
+                  )}
                   <div className="d-grid gap-2">
-                    <button className="btn btn-gradient text-white" onClick={() => addToCart(s)} disabled={s.quantity===0}>Add to Cart</button>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        if (s.quantity === 0) return
+                        const qty = quantities[s._id] || 1
+                        navigate('/payment', { state: { sweet: s, quantity: qty } })
+                      }}
+                      disabled={s.quantity === 0}
+                      style={{ fontWeight: 600 }}
+                    >
+                      🛒 Buy Now
+                    </button>
+                    <button
+                      className="btn btn-outline-success"
+                      onClick={() => { addToCart(s, quantities[s._id] || 1); }}
+                      disabled={s.quantity === 0}
+                      style={{ fontWeight: 600 }}
+                    >
+                      ➕ Add to Cart
+                    </button>
                     <button className="btn btn-outline-danger" onClick={() => toggleWishlist(s)}>♡ Wishlist</button>
                   </div>
                 </div>

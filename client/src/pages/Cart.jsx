@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../authContext.jsx'
 import api from '../api'
+import { getSweetImage } from '../utils/sweetImages'
 
 export default function Cart() {
   const { items, updateQuantity, removeFromCart, clearCart } = useCart()
@@ -45,8 +46,12 @@ export default function Cart() {
       {items.length === 0 && <div className="alert alert-info">Cart is empty.</div>}
       {items.map(i => (
         <div key={i._id} className="card mb-3 p-3 d-flex flex-row align-items-center">
-          <div style={{ width: 90, height: 90, marginRight: 16 }}>
-            <img src={i.image || `https://source.unsplash.com/collection/888146/200x200?sig=${i._id}`} alt={i.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }} />
+          <div style={{ width: 90, height: 90, marginRight: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', borderRadius: 8, background: 'linear-gradient(135deg, rgba(255,204,229,0.1), rgba(255,240,245,0.08))' }}>
+            {i.image && String(i.image).startsWith('http') ? (
+              <img src={i.image} alt={i.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }} />
+            ) : (
+              getSweetImage(i.name)
+            )}
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 700 }}>{i.name}</div>

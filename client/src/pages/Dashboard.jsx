@@ -12,6 +12,7 @@ export default function Dashboard() {
   const [maxPrice, setMaxPrice] = useState('')
   const [name, setName] = useState('')
   const [newSweet, setNewSweet] = useState({ name: '', category: '', price: '', quantity: '' })
+  const [restockQuantities, setRestockQuantities] = useState({})
 
   useEffect(() => {
     if (!user) return;
@@ -54,6 +55,18 @@ export default function Dashboard() {
       setNewSweet({ name: '', category: '', price: '', quantity: '' })
     } catch (err) {
       alert('Failed to create sweet')
+    }
+  }
+
+  async function handleRestock(id) {
+    const quantity = parseInt(restockQuantities[id]) || 0
+    if (!quantity || quantity <= 0) return
+    try {
+      const res = await api.restockSweet(id, { quantity })
+      setSweets(sweets.map(s => s._id === id ? res.data.sweet : s))
+      setRestockQuantities({ ...restockQuantities, [id]: '' })
+    } catch (err) {
+      alert('Failed to restock sweet')
     }
   }
 
@@ -101,28 +114,77 @@ export default function Dashboard() {
           </form>
 
           {user.role === 'admin' && (
-            <div className="card admin-section mb-4">
-              <div className="card-body">
-                <h5 className="card-title mb-4">➕ Add New Sweet</h5>
-                <form className="row g-3" onSubmit={handleCreate}>
-                  <div className="col-md-3">
-                    <input className="form-control" placeholder="Sweet Name" value={newSweet.name} onChange={(e) => setNewSweet({ ...newSweet, name: e.target.value })} required />
-                  </div>
-                  <div className="col-md-2">
-                    <input className="form-control" placeholder="Category" value={newSweet.category} onChange={(e) => setNewSweet({ ...newSweet, category: e.target.value })} required />
-                  </div>
-                  <div className="col-md-2">
-                    <input className="form-control" placeholder="Price" type="number" step="0.01" value={newSweet.price} onChange={(e) => setNewSweet({ ...newSweet, price: e.target.value })} required />
-                  </div>
-                  <div className="col-md-2">
-                    <input className="form-control" placeholder="Qty" type="number" value={newSweet.quantity} onChange={(e) => setNewSweet({ ...newSweet, quantity: e.target.value })} required />
-                  </div>
-                  <div className="col-md-3">
-                    <button className="btn btn-success w-100">Add to Inventory</button>
-                  </div>
-                </form>
+            <>
+              <div className="card admin-section mb-4">
+                <div className="card-body">
+                  <h5 className="card-title mb-4">➕ Add New Sweet</h5>
+                  <form className="row g-3" onSubmit={handleCreate}>
+                    <div className="col-md-3">
+                      <input className="form-control" placeholder="Sweet Name" value={newSweet.name} onChange={(e) => setNewSweet({ ...newSweet, name: e.target.value })} required />
+                    </div>
+                    <div className="col-md-2">
+                      <input className="form-control" placeholder="Category" value={newSweet.category} onChange={(e) => setNewSweet({ ...newSweet, category: e.target.value })} required />
+                    </div>
+                    <div className="col-md-2">
+                      <input className="form-control" placeholder="Price" type="number" step="0.01" value={newSweet.price} onChange={(e) => setNewSweet({ ...newSweet, price: e.target.value })} required />
+                    </div>
+                    <div className="col-md-2">
+                      <input className="form-control" placeholder="Qty" type="number" value={newSweet.quantity} onChange={(e) => setNewSweet({ ...newSweet, quantity: e.target.value })} required />
+                    </div>
+                    <div className="col-md-3">
+                      <button className="btn btn-success w-100">Add to Inventory</button>
+                    </div>
+                  </form>
+                </div>
               </div>
-            </div>
+
+              <div className="card admin-section mb-4">
+                <div className="card-body">
+                  <h5 className="card-title mb-4">📦 Manage Stock</h5>
+                  <div className="table-responsive">
+                    <table className="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Sweet Name</th>
+                          <th>Category</th>
+                          <th>Current Stock</th>
+                          <th>Add Quantity</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {sweets.map(s => (
+                          <tr key={s._id}>
+                            <td>{s.name}</td>
+                            <td>{s.category}</td>
+                            <td>{s.quantity}</td>
+                            <td>
+                              <input
+                                type="number"
+                                className="form-control"
+                                min="1"
+                                value={restockQuantities[s._id] || ''}
+                                onChange={(e) => setRestockQuantities({ ...restockQuantities, [s._id]: e.target.value })}
+                                placeholder="Qty to add"
+                              />
+                            </td>
+                            <td>
+                              <button
+                                className="btn btn-outline-primary btn-sm"
+                                onClick={() => handleRestock(s._id)}
+                                disabled={!restockQuantities[s._id] || parseInt(restockQuantities[s._id]) <= 0}
+                              >
+                                Restock
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </>
           )}
 
           <div className="row">

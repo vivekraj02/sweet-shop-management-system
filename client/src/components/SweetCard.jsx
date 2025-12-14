@@ -3,6 +3,7 @@ import api from '../api'
 import { useAuth } from '../authContext.jsx'
 import { useCart } from '../contexts/CartContext'
 import { useWishlist } from '../contexts/WishlistContext'
+import { getSweetImage } from '../utils/sweetImages'
 
 export default function SweetCard({ sweet, onDelete, onChange }) {
   const { user } = useAuth()
@@ -10,8 +11,12 @@ export default function SweetCard({ sweet, onDelete, onChange }) {
   const { items: wishlistItems, toggle: toggleWishlist } = useWishlist()
   const [qty, setQty] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [cartLoading, setCartLoading] = useState(false)
+  const [wishlistLoading, setWishlistLoading] = useState(false)
   const isOutOfStock = sweet.quantity === 0
   const isWishlisted = wishlistItems.some(i => i._id === sweet._id)
+
+
 
   async function purchase() {
     if (isOutOfStock) return
@@ -65,7 +70,7 @@ export default function SweetCard({ sweet, onDelete, onChange }) {
               <img src={sweet.image} alt={sweet.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           ) : (
-            <div style={{ fontSize: '2.25rem', marginBottom: '0.5rem' }}>{sweet.image || '🍬'}</div>
+            <div style={{ fontSize: '2.25rem', marginBottom: '0.5rem' }}>{getSweetImage(sweet.name)}</div>
           )}
 
           <h5 className="card-title mb-1">{sweet.name}</h5>
@@ -112,16 +117,36 @@ export default function SweetCard({ sweet, onDelete, onChange }) {
             </button>
             <button
               className="btn btn-outline-success"
-              onClick={() => { addToCart(sweet, qty); }}
-              disabled={isOutOfStock}
+              onClick={async () => {
+                setCartLoading(true)
+                try {
+                  addToCart(sweet, qty)
+                } finally {
+                  setCartLoading(false)
+                }
+              }}
+              disabled={isOutOfStock || cartLoading}
               style={{ fontWeight: 600 }}
             >
-              ➕ Add to Cart
+              {cartLoading ? '🔄 Adding...' : '➕ Add to Cart'}
             </button>
           </div>
 
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: 8 }}>
-            <button className={isWishlisted ? 'btn btn-outline-danger btn-sm' : 'btn btn-outline-primary btn-sm'} onClick={() => toggleWishlist(sweet)}>{isWishlisted ? '♥ Wishlist' : '♡ Wishlist'}</button>
+            <button
+              className={isWishlisted ? 'btn btn-outline-danger btn-sm' : 'btn btn-outline-primary btn-sm'}
+              onClick={async () => {
+                setWishlistLoading(true)
+                try {
+                  toggleWishlist(sweet)
+                } finally {
+                  setWishlistLoading(false)
+                }
+              }}
+              disabled={wishlistLoading}
+            >
+              {wishlistLoading ? '🔄 Updating...' : (isWishlisted ? '♥ Wishlist' : '♡ Wishlist')}
+            </button>
           </div>
 
           {user?.role === 'admin' && (

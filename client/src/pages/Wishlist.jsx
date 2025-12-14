@@ -1,6 +1,7 @@
 import React from 'react'
 import { useWishlist } from '../contexts/WishlistContext'
 import { useCart } from '../contexts/CartContext'
+import { getSweetImage } from '../utils/sweetImages'
 
 export default function Wishlist() {
   const { items, remove, toggle } = useWishlist()
@@ -14,8 +15,12 @@ export default function Wishlist() {
         {items.map(i => (
           <div key={i._id} className="col-md-4 mb-3">
             <div className="card p-3">
-              <div style={{ width: '100%', height: 160, marginBottom: 8 }}>
-                <img src={i.image || `https://source.unsplash.com/collection/888146/400x300?sig=${i._id}`} alt={i.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }} />
+              <div style={{ width: '100%', height: 160, marginBottom: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', borderRadius: 8, background: 'linear-gradient(135deg, rgba(255,204,229,0.1), rgba(255,240,245,0.08))' }}>
+                {i.image && String(i.image).startsWith('http') ? (
+                  <img src={i.image} alt={i.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }} />
+                ) : (
+                  getSweetImage(i.name)
+                )}
               </div>
               <div style={{ fontWeight: 700 }}>{i.name}</div>
               <div className="text-muted">{i.category}</div>

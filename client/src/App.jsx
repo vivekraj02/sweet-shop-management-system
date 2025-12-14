@@ -6,6 +6,7 @@ import IndianSweetShop from './pages/IndianSweetShop'
 import Dashboard from './pages/Dashboard'
 import Cart from './pages/Cart'
 import Wishlist from './pages/Wishlist'
+import Payment from './pages/Payment'
 import Footer from './components/Footer'
 import { useAuth } from './authContext.jsx'
 import { useCart } from './contexts/CartContext'
@@ -16,12 +17,13 @@ export default function App() {
   const { items } = useCart();
   const { items: wishlistItems } = useWishlist();
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div className="body-blob" />
-      <nav className="d-flex justify-content-between align-items-center mb-4">        <h3 className="d-flex align-items-center gap-2"><span className="animate-bounce">🎶</span> Sweet Symphony</h3>
+      <nav className="d-flex justify-content-between align-items-center mb-4">        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}><h3 className="d-flex align-items-center gap-2" style={{ cursor: 'pointer', margin: 0 }}><span className="animate-bounce">🎶</span> Sweet Symphony</h3></Link>
         <div className="d-flex align-items-center gap-3">
           <Link to="/wishlist" className="btn btn-outline-light btn-sm">Wishlist ({wishlistItems.length})</Link>
           <Link to="/cart" className="btn btn-outline-light btn-sm">Cart ({items.length})</Link>
+          {user?.role === 'admin' && <Link to="/dashboard" className="btn btn-outline-warning btn-sm">Dashboard</Link>}
           {user ? (
             <>
               <span>👤 {user.email} <strong>({user.role})</strong></span>
@@ -36,7 +38,7 @@ export default function App() {
         </div>
       </nav>
 
-      <div className="container py-4">
+      <div className="container py-4" style={{ flex: 1 }}>
         <Routes>
           <Route path="/" element={<IndianSweetShop />} />
           <Route path="/dashboard" element={<Dashboard />} />
@@ -44,6 +46,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/payment" element={<Payment />} />
         </Routes>
       </div>
       <Footer />
