@@ -145,8 +145,22 @@ npm test
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+## AI Usage in Development
+
+This project was developed with the assistance of AI tools to enhance productivity and code quality:
+
+- **Code Generation**: AI-powered code completion and generation for React components, Express routes, and MongoDB models
+- **Bug Fixing**: AI-assisted debugging and error resolution across frontend and backend
+- **Documentation**: AI-generated comprehensive README and code comments
+- **UI/UX Design**: AI suggestions for responsive design patterns and user experience improvements
+- **Testing**: AI-assisted test case generation and validation
+- **Code Review**: AI-powered code analysis for best practices and potential improvements
+
+The AI tools helped accelerate development while maintaining code quality and following modern web development standards.
+
 ## Acknowledgments
 
 - Icons from Lucide React
 - UI components styled with Bootstrap
 - Emoji images for sweets using custom utility
+- AI assistance from BLACKBOXAI for development and documentation
