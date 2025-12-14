@@ -4,9 +4,10 @@ const router = express.Router();
 const { authenticate, requireAdmin } = require('../middlewares/auth');
 const sweetsController = require('../controllers/sweetsController');
 
-router.get('/', authenticate, sweetsController.listSweets);
+// Public listing/search endpoints (allow guests to browse sweets)
+router.get('/', sweetsController.listSweets);
 
-router.get('/search', authenticate, sweetsController.searchSweets);
+router.get('/search', sweetsController.searchSweets);
 
 router.post('/', authenticate, [
   body('name').notEmpty().withMessage('Name required'),

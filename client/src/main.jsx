@@ -5,12 +5,18 @@ import App from './App'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles.css'
 import { AuthProvider } from './authContext.jsx'
+import { CartProvider } from './contexts/CartContext'
+import { WishlistProvider } from './contexts/WishlistContext'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <CartProvider>
+          <WishlistProvider>
+            <App />
+          </WishlistProvider>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

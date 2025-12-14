@@ -1,6 +1,6 @@
-# Sweet Shop Management System
+# Sweet Symphony Management System
 
-This is a Node.js + Express backend for the Sweet Shop Management System with MongoDB as the database.
+This is a Node.js + Express backend for the Sweet Symphony Management System with MongoDB as the database.
 
 ## Features
 - User registration and login with JWT-based authentication
