@@ -164,3 +164,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - UI components styled with Bootstrap
 - Emoji images for sweets using custom utility
 - AI assistance from GitHub Copilot for development and documentation
+
+## Snippets
+<img width="1896" height="908" alt="Screenshot 2025-12-14 213111" src="https://github.com/user-attachments/assets/334a62ec-a141-4700-bce6-a7f888adc807" />
