@@ -167,3 +167,20 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Snippets
 <img width="1896" height="908" alt="Screenshot 2025-12-14 213111" src="https://github.com/user-attachments/assets/334a62ec-a141-4700-bce6-a7f888adc807" />
+
+<img width="1896" height="909" alt="Screenshot 2025-12-14 215007" src="https://github.com/user-attachments/assets/7417e0c0-a6ed-4b7c-b279-631bd160a640" />
+
+<img width="1903" height="911" alt="Screenshot 2025-12-14 214502" src="https://github.com/user-attachments/assets/9b514707-64bb-44eb-9837-24fc89ceb6a4" />
+
+<img width="1899" height="907" alt="Screenshot 2025-12-14 214542" src="https://github.com/user-attachments/assets/26064099-9954-43ac-affc-e3f4e57cf96c" />
+
+<img width="1898" height="910" alt="Screenshot 2025-12-14 214800" src="https://github.com/user-attachments/assets/e466c0dc-36f7-41b1-b8a2-f61173fb2471" />
+
+<img width="1900" height="911" alt="Screenshot 2025-12-14 214835" src="https://github.com/user-attachments/assets/8fad64b2-deea-44bc-801c-cd6b706adcc9" />
+
+<img width="1895" height="894" alt="Screenshot 2025-12-14 214857" src="https://github.com/user-attachments/assets/afb73877-38a9-4c3c-ba99-dc68879261dd" />
+
+
+
+
+
