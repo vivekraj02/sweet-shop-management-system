@@ -79,7 +79,7 @@ export default function Payment() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="John Doe"
+                    placeholder="Enter your name"
                     value={name}
                     onChange={e => setName(e.target.value)}
                   />

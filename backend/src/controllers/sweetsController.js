@@ -5,12 +5,7 @@ async function createSweet(req, res, next) {
     const { name, category, price, quantity } = req.body;
     const existing = await Sweet.findOne({ name });
     if (existing) return res.status(409).json({ message: 'Sweet with this name already exists' });
-    const sweet = new Sweet({
-      name,
-      category,
-      price: Math.max(0.01, parseFloat(price) || 0.01),
-      quantity: Math.max(1, parseInt(quantity, 10) || 1)
-    });
+    const sweet = new Sweet({ name, category, price, quantity });
     await sweet.save();
     res.status(201).json({ sweet });
   } catch (err) {
